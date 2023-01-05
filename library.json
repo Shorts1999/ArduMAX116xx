@@ -1,0 +1,22 @@
+{
+    "name": "MAX116xx Arduino",
+    "version": "1.0.0",
+    "description": "A library to interface with the MAX116xx series of I2C ADC chips",
+    "keywords": "Arduino, ADC, MAX116xx, Analog Devices, Analog, MAX11606,MAX11607,MAX11608,MAX11609,MAX11610,MAX11611",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/Shorts1999/MAX116xx.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Sjors Smit",
+        "url": "https://www.shungeryunger.com",
+        "maintainer": true
+      }
+    ],
+    "license": "MIT",
+    "frameworks": "Arduino",
+    "platforms": "*"
+  }
