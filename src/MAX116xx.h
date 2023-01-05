@@ -21,10 +21,10 @@
 class MAX116xx {
 public:
   MAX116xx(int address, int scl = SCL, int sda = SDA);
-  MAX116xx(int address, TwoWire *twoWire);
+  // MAX116xx(int address, TwoWire *twoWire);
   void begin();
   uint16_t readADC(uint8_t channel);
-  void writeConfig(uint8_t config);
+  uint8_t writeConfig(uint8_t config);
   uint8_t readConfig();
   void writeThresholdHigh(uint16_t threshold);
   uint16_t readThresholdHigh();

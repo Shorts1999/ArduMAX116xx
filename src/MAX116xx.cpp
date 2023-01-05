@@ -2,6 +2,7 @@
 
 #include "MAX116xx.h"
 
+#define BUFFERSIZE(x) sizeof(x)/sizeof(x[0])
 
 MAX116xx::MAX116xx(int address, int scl, int sda) {
   mAddress = address;
@@ -19,8 +20,7 @@ uint8_t MAX116xx::writeRegister(uint8_t reg, uint8_t value) {
 }
 
 uint8_t MAX116xx::readRegister(uint8_t reg, uint8_t *data) {
-  Wire.beginTransmission(mAddress);
-  Wire.write(reg);
+  Wire.requestFrom(mAddress, 2);
   *data = (uint8_t)Wire.read();
   return Wire.endTransmission();
 }
@@ -35,26 +35,29 @@ uint8_t MAX116xx::readRegister(uint8_t reg, uint8_t *data, uint8_t len) {
 }
 
 uint16_t MAX116xx::readADC(uint8_t channel) {
-  // Set the channel number in the conversion register
-  writeRegister(MAX116xx_CONVERSION, channel & 0x0F);
-
-  // Wait for the conversion to complete
-  while (readStatus() & 0x80)
-    delay(1);
+  Wire.requestFrom(mAddress, 2);
 
   // Read the conversion result
   uint8_t data[2];
-  uint8_t err = readRegister(MAX116xx_CONVERSION, data, sizeof(data) / sizeof(data[0]));
-  if (err == 0) {
+  uint8_t err = Wire.readBytes(data, sizeof(data)/sizeof(data[0]));
+  if (err != 0) {
     uint16_t result = data[0];
-    return (result << 8) | data[1];
+    return ((result << 8) | data[1]) & 0x03ff;
   }
 
   return 0;
 }
 
-void MAX116xx::writeConfig(uint8_t config) {
-  writeRegister(MAX116xx_CONFIG, config);
+uint8_t MAX116xx::readStatus(){
+  return 1;
+}
+
+uint8_t MAX116xx::writeConfig(uint8_t config) {
+  Wire.beginTransmission(mAddress);
+
+  Wire.write(config);
+
+  return Wire.endTransmission();
 }
 
 uint8_t MAX116xx::readConfig() {
