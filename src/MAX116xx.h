@@ -17,11 +17,14 @@ public:
   // MAX116xx(int address, TwoWire *twoWire);
   void begin();
   uint16_t readADC(uint8_t channel);
+  uint16_t readAll(uint8_t *buf);
 
   uint8_t writeSetup(uint8_t setup);
   uint8_t writeSetup(uint8_t reference, uint8_t clockSource, uint8_t bipUni, uint8_t resetConfig);
   uint8_t writeConfig(uint8_t config);
   uint8_t writeConfig(uint8_t scanMode, uint8_t channel, uint8_t adcMode);
+
+  uint8_t getAdcCount();
 
   static const uint8_t REFERENCE_VDD            = 0x00; //Use VDD as reference voltage (5V/3V3)
   static const uint8_t REFERENCE_EXTERNAL       = 0x02; //Use external reference on pin (AINX/)REF
@@ -42,16 +45,18 @@ public:
   static const uint8_t SCANMODE_UPTO_UPPERHALF  = 0x02; //scans up from AIN6(11608/09/10/11) or up from AIN2 (11606/07) to selected channel
   static const uint8_t SCANMODE_SINGLE          = 0x03; //converts selected channel once
 
-  static const uint8_t ADCMODE_SINGLEENDED     = 0x01; //Configure ADC to run in single-ended mode
+  static const uint8_t ADCMODE_SINGLE_ENDED     = 0x01; //Configure ADC to run in single-ended mode
   static const uint8_t ADCMODE_DIFFERENTIAL    = 0x00; //Configure ADC to run in differential mode
 
 private:
   int mAddress;
   uint8_t mAdcCount;
   uint8_t mRefVoltage;
-  uint8_t readRegister(uint8_t reg, uint8_t *data);
-  uint8_t readRegister(uint8_t reg, uint8_t *data, uint8_t len);
-  uint8_t writeRegister(uint8_t reg, uint8_t value);
+  uint8_t setAdcCount(uint8_t chipType, bool externalRef);
+  // uint8_t readRegister(uint8_t reg, uint8_t *data);
+  // uint8_t readRegister(uint8_t reg, uint8_t *data, uint8_t len);
+  // uint8_t writeRegister(uint8_t reg, uint8_t value);
+
 };
 
 #endif //_MAX116xx_H
